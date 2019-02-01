@@ -3,18 +3,6 @@ import NumKey from "./numkey";
 
 class NumPad extends Component {
   state = {
-    // numKeys: [
-    //   { id: 0, keyValue: 0 },
-    //   { id: 1, keyValue: 1 },
-    //   { id: 2, keyValue: 2 },
-    //   { id: 3, keyValue: 3 },
-    //   { id: 4, keyValue: 4 },
-    //   { id: 5, keyValue: 5 },
-    //   { id: 6, keyValue: 6 },
-    //   { id: 7, keyValue: 7 },
-    //   { id: 8, keyValue: 8 },
-    //   { id: 9, keyValue: 9 }
-    // ],
     inputValue: ""
   };
 
@@ -22,6 +10,7 @@ class NumPad extends Component {
     var inputValue = "";
     if (numkey < 10) {
       inputValue = this.state.inputValue + numkey;
+    } else if (numkey === "OK") {
     }
 
     this.setState({ inputValue });
@@ -53,7 +42,7 @@ class NumPad extends Component {
           <NumKey
             key={99}
             keyvalue={"OK"}
-            onClick={this.numkeyOnClickHandler}
+            onClick={() => this.props.okClicked(this.state.inputValue)}
           />
         </div>
 
