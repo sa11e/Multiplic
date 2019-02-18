@@ -5,9 +5,9 @@ class NavBar extends Component {
     return (
       <nav className="navbar navbar-light bg-light">
         <a className="navbar-brand" href="#">
-          Navbar{" "}
+          Bäst tid hittills:{" "}
           <span className="badge badge-pill badge-secondary">
-            {this.props.totalCounters}
+            {this.props.bestResultTimeText}
           </span>
         </a>
       </nav>
