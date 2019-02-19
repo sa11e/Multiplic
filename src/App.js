@@ -34,6 +34,33 @@ class App extends Component {
     imageShouldHide: false
   };
 
+  importAll = r => {
+    var k = r.keys();
+    // var images2 = [];
+    // for (var i; i<k.length; i++)
+    //   images2[i] = k[i];
+
+    let images = {};
+    r.keys().map((item, index) => {
+      images[item.replace("./", "")] = r(item);
+    });
+    return images;
+  };
+
+  getRandomImage = () => {
+    // Get all images in the images folder
+    var images = require
+      .context("./images", false, /\.(png|jpe?g|svg)$/)
+      .keys();
+    var length = images.length;
+
+    // Get random number between 0 and number of images
+    var randomIndex = Math.floor(Math.random() * length);
+    var randomImage = images[randomIndex].replace("./", "");
+    var imageFullPath = require("./images/" + randomImage);
+    return imageFullPath;
+  };
+
   handleDelete = counterId => {
     console.log("delete" + counterId);
     const counters = this.state.counters.filter(c => c.id !== counterId);
@@ -82,6 +109,7 @@ class App extends Component {
     // If correct, increase correctAnswers and show new question.
     // Otherwise, show an error
     if (answer == this.state.question.answer) {
+      // Correct answer
       this.setState({
         correctAnswers: ++this.state.correctAnswers,
         answered: ++this.state.answered,
@@ -90,8 +118,10 @@ class App extends Component {
       });
 
       if (this.state.correctAnswers === this.state.total) {
+        // User has answered alla questsions. End the game
         this.endGame();
       } else {
+        // More questions to answer. Display next one
         this.createNextQuestion();
       }
     } else {
@@ -106,8 +136,14 @@ class App extends Component {
   };
 
   endGame = () => {
+    // Stop timer and calculate result time
     this.stopGame();
-    var imageFullPath = require("./images/Inez_staende_mob.JPG");
+
+    // Generate success image
+    // var imageFullPath = require("./images/Inez_staende_mob.JPG");
+    var imageFullPath = this.getRandomImage();
+
+    // Update the state
     this.setState({
       resultText: "Klar! Tid: " + this.getTimerText(this.state.resultTime),
       imageFullPath: imageFullPath,
@@ -134,7 +170,9 @@ class App extends Component {
       resultText: "",
       isGameStarted: true,
       startTime: new Date(),
-      timerHandler: setInterval(this.tick, 33)
+      timerHandler: setInterval(this.tick, 33),
+      imageFullPath: "",
+      imageShouldHide: true
     });
   };
 
