@@ -8,6 +8,9 @@ import ResultBoard from "./components/resultBoard";
 import Timer from "./components/timer";
 import StartButton from "./components/startButton";
 import Image from "./components/image";
+import ToogleAnswerMode from "./components/toogleAnswerMode";
+import SelectAnswerButtons from "./components/selectAnswerButtons";
+// import SuccessModal from "./components/successModal";
 
 class App extends Component {
   state = {
@@ -31,15 +34,21 @@ class App extends Component {
 
     // image
     imageFullPath: "",
-    imageShouldHide: false
+    imageShouldHide: false,
+
+    // Answer mode
+    answerMode: "",
+    choices: [],
+    hideNumPad: true,
+    hideSelectButtons: true,
+
+    modalShow: false
   };
+
+  modalClose = () => this.setState({ modalShow: false });
 
   importAll = r => {
     var k = r.keys();
-    // var images2 = [];
-    // for (var i; i<k.length; i++)
-    //   images2[i] = k[i];
-
     let images = {};
     r.keys().map((item, index) => {
       images[item.replace("./", "")] = r(item);
@@ -93,11 +102,44 @@ class App extends Component {
       answer: this.state.selectedMultitable * random
     };
 
-    this.setState({ question });
+    this.setAnswerMode(this.answerMode);
+    this.setState({ question, choices: this.getFixedAnswers(question.answer) });
+  };
+
+  getFixedAnswers = correctAnswer => {
+    var fixedAnswers = [];
+    var numberOfAnswers = 3;
+    for (var i = 0; i < numberOfAnswers; i++) {
+      var correctAnswerIsAdded = fixedAnswers.includes(correctAnswer);
+      if (
+        !correctAnswerIsAdded &&
+        (i == numberOfAnswers - 1 || Math.random() < 1 / numberOfAnswers)
+      ) {
+        // Add correct number
+        fixedAnswers[i] = correctAnswer;
+        continue;
+      }
+
+      // Add a random numner, possible correct answer
+      fixedAnswers[i] = this.getRandomAnswer(fixedAnswers);
+    }
+    return fixedAnswers;
+  };
+
+  getRandomAnswer = excludeList => {
+    while (true) {
+      var random = Math.floor(Math.random() * 10 + 1);
+      var randomAnswer = this.state.selectedMultitable * random;
+      if (!excludeList.includes(randomAnswer)) return randomAnswer;
+    }
   };
 
   handleClearClicked = () => {
     this.setState({ answerField: "" });
+  };
+
+  handleAnswerbuttonClicked = answer => {
+    this.handleOkClicked(answer);
   };
 
   handleOkClicked = answer => {
@@ -128,7 +170,8 @@ class App extends Component {
       // Wrong answer
       this.setState({
         resultText: "Fel!",
-        resultTextClasses: "bg-danger"
+        resultTextClasses: "bg-danger",
+        choices: this.getFixedAnswers(this.state.question.answer)
       });
     }
 
@@ -247,12 +290,35 @@ class App extends Component {
     this.setState({ answerField, resultText: "" });
   };
 
+  setAnswerMode = mode => {
+    // alert("" + mode);
+    var hideNumPad = false;
+    var hideSelectButtons = false;
+    if (mode == "numpad") {
+      hideNumPad = false;
+      hideSelectButtons = true;
+    } else {
+      hideNumPad = true;
+      hideSelectButtons = false;
+    }
+
+    this.setState({
+      answerMode: mode,
+      hideNumPad: hideNumPad,
+      hideSelectButtons: hideSelectButtons
+    });
+  };
+
   render() {
     return (
       <React.Fragment>
         <NavBar bestResultTimeText={this.state.bestResultTimeText} />
         <main className="container">
           <div>
+            <ToogleAnswerMode
+              onAnswerModeChanged={this.setAnswerMode}
+              choooseAnswerChecked={this.state.answerMode != "numpad"}
+            />
             <StartButton
               buttonText={this.state.startButtonText}
               onClick={this.handleStartButtonClicked}
@@ -271,16 +337,37 @@ class App extends Component {
               questionText={this.state.question.questionText}
               answerField={this.state.answerField}
             />
-            <NumPad
-              okClicked={this.handleOkClicked}
-              clearClicked={this.handleClearClicked}
-              numkeyClicked={this.numkeyOnClickHandler}
-              answerField={this.state.answerField}
-            />
+            {!this.state.hideSelectButtons && (
+              <SelectAnswerButtons
+                choices={this.state.choices}
+                answerbuttonClicked={this.handleAnswerbuttonClicked}
+              />
+            )}
+            {!this.state.hideNumPad && (
+              <NumPad
+                hide={this.state.hideNumPad}
+                okClicked={this.handleOkClicked}
+                clearClicked={this.handleClearClicked}
+                numkeyClicked={this.numkeyOnClickHandler}
+                answerField={this.state.answerField}
+              />
+            )}
             <Image
               clearClicked={this.state.imageShouldHide}
               imageFullPath={this.state.imageFullPath}
             />
+
+            {/* <Button
+              variant="primary"
+              onClick={() => this.setState({ modalShow: true })}
+            >
+              Launch vertically centered modal
+            </Button> */}
+
+            {/* <SuccessModal
+              show={this.state.modalShow}
+              onHide={this.modalClose}
+            /> */}
           </div>
         </main>
       </React.Fragment>
