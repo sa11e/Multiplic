@@ -9,7 +9,7 @@ class Question extends Component {
     return (
       <div style={style}>
         <span className="mr-2">
-          <b>Fråga?:</b>
+          <b>Uppgift:</b>
         </span>
         <span>{this.props.questionText} </span>
         <span>
