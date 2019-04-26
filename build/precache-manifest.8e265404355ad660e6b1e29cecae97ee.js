@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "/static/media/vera_staende_mob 2.0b1878d1.jpg"
   },
   {
-    "revision": "58722b6b9b8f88e84430",
+    "revision": "9aa28dda405d7d88360b",
     "url": "/static/css/main.d812f0f7.chunk.css"
   },
   {
@@ -24,8 +24,8 @@ self.__precacheManifest = [
     "url": "/static/media/inez_staende_mob2.f4716095.jpg"
   },
   {
-    "revision": "58722b6b9b8f88e84430",
-    "url": "/static/js/main.58722b6b.chunk.js"
+    "revision": "9aa28dda405d7d88360b",
+    "url": "/static/js/main.9aa28dda.chunk.js"
   },
   {
     "revision": "8a6c85981da7b23341a7b9427ffc68e6",
@@ -44,7 +44,7 @@ self.__precacheManifest = [
     "url": "/static/css/1.b385ce8b.chunk.css"
   },
   {
-    "revision": "71f9ca460af6a650e81a3244fcebb6b5",
+    "revision": "65621574cf9944b2c0b2cc58046f56f9",
     "url": "/index.html"
   }
 ];
