@@ -17,7 +17,7 @@ class App extends Component {
     counters: [{ id: 1, value: 4 }, { id: 2, value: 2 }, { id: 3, value: 0 }],
     correctAnswers: 0,
     answered: 0,
-    total: 3,
+    totalQuestions: window.location.href.includes("localhost") ? 3 : 10,
     selectedMultitable: 5,
     question: { questionText: "", answer: 0 },
     resultText: "",
@@ -159,7 +159,7 @@ class App extends Component {
         resultTextClasses: "bg-success"
       });
 
-      if (this.state.correctAnswers === this.state.total) {
+      if (this.state.correctAnswers === this.state.totalQuestions) {
         // User has answered alla questsions. End the game
         this.endGame();
       } else {
@@ -330,7 +330,7 @@ class App extends Component {
             <ResultBoard
               resultTextClasses={this.state.resultTextClasses}
               correctAnswers={this.state.correctAnswers}
-              total={this.state.total}
+              total={this.state.totalQuestions}
               resultText={this.state.resultText}
             />
             <Question
