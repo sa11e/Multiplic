@@ -10,6 +10,7 @@ import StartButton from "./components/startButton";
 import Image from "./components/image";
 import ToogleAnswerMode from "./components/toogleAnswerMode";
 import SelectAnswerButtons from "./components/selectAnswerButtons";
+import SettingsPanel from "./components/settingsPanel";
 // import SuccessModal from "./components/successModal";
 
 class App extends Component {
@@ -31,6 +32,9 @@ class App extends Component {
     bestResultTimeText: "",
     startButtonText: "Starta",
     isGameStarted: false,
+
+    //settings
+    settingsShouldHide: true,
 
     // image
     imageFullPath: "",
@@ -68,6 +72,10 @@ class App extends Component {
     var randomImage = images[randomIndex].replace("./", "");
     var imageFullPath = require("./images/" + randomImage);
     return imageFullPath;
+  };
+
+  updateSelectedMultiTable = newTable => {
+    this.setState({ selectedMultitable: newTable });
   };
 
   handleDelete = counterId => {
@@ -219,6 +227,11 @@ class App extends Component {
     });
   };
 
+  settingsPanelClicked = () => {
+    var currentValue = this.state.settingsShouldHide;
+    this.setState({ settingsShouldHide: !currentValue });
+  };
+
   stopGame = () => {
     clearInterval(this.state.timerHandler);
     this.setResultTime();
@@ -277,7 +290,9 @@ class App extends Component {
     var seconds = Math.floor(milliseconds / 1000);
     milliseconds -= seconds * 1000;
 
-    return mins + " min " + seconds + "," + milliseconds + " sek";
+    return (
+      mins + " min " + seconds + "," + Math.round(milliseconds / 100) + " sek"
+    );
   };
 
   numkeyOnClickHandler = numkey => {
@@ -315,10 +330,17 @@ class App extends Component {
         <NavBar bestResultTimeText={this.state.bestResultTimeText} />
         <main className="container">
           <div>
-            <ToogleAnswerMode
+            <SettingsPanel
+              onSettingsPanelClicked={this.settingsPanelClicked}
+              settingsShouldHide={this.state.settingsShouldHide}
               onAnswerModeChanged={this.setAnswerMode}
               choooseAnswerChecked={this.state.answerMode != "numpad"}
+              updateSelectedMultiTable={this.updateSelectedMultiTable}
             />
+            {/* <ToogleAnswerMode
+              onAnswerModeChanged={this.setAnswerMode}
+              choooseAnswerChecked={this.state.answerMode != "numpad"}
+            /> */}
             <StartButton
               buttonText={this.state.startButtonText}
               onClick={this.handleStartButtonClicked}
@@ -352,10 +374,7 @@ class App extends Component {
                 answerField={this.state.answerField}
               />
             )}
-            <Image
-              clearClicked={this.state.imageShouldHide}
-              imageFullPath={this.state.imageFullPath}
-            />
+            <Image imageFullPath={this.state.imageFullPath} />
 
             {/* <Button
               variant="primary"

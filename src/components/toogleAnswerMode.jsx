@@ -6,6 +6,7 @@ class ToogleAnswerMode extends Component {
   render() {
     return (
       <div
+        // onChange={event => this.props.onAnswerModeChanged(event.target.value)}
         onChange={event => this.props.onAnswerModeChanged(event.target.value)}
       >
         <input
