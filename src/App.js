@@ -11,6 +11,7 @@ import Image from "./components/image";
 import ToogleAnswerMode from "./components/toogleAnswerMode";
 import SelectAnswerButtons from "./components/selectAnswerButtons";
 import SettingsPanel from "./components/settingsPanel";
+import WebCam from "react-webcam";
 // import SuccessModal from "./components/successModal";
 
 class App extends Component {
@@ -46,7 +47,10 @@ class App extends Component {
     hideNumPad: true,
     hideSelectButtons: true,
 
-    modalShow: false
+    modalShow: false,
+
+    // Captured image
+    caputuredImage: ""
   };
 
   modalClose = () => this.setState({ modalShow: false });
@@ -209,6 +213,7 @@ class App extends Component {
       this.stopGame();
     } else {
       // Start the game and the timer
+      this.capture();
       this.startGame();
     }
   };
@@ -324,7 +329,24 @@ class App extends Component {
     });
   };
 
+  setRef = webcam => {
+    this.webcam = webcam;
+  };
+
+  capture = () => {
+    const imageSrc = this.webcam.getScreenshot();
+    this.setState({
+      caputuredImage: imageSrc
+    });
+  };
+
   render() {
+    const videoConstraints = {
+      width: 1280,
+      height: 720,
+      facingMode: "user"
+    };
+
     return (
       <React.Fragment>
         <NavBar bestResultTimeText={this.state.bestResultTimeText} />
@@ -374,6 +396,17 @@ class App extends Component {
                 answerField={this.state.answerField}
               />
             )}
+            <WebCam
+              audio={false}
+              height={350}
+              ref={this.setRef}
+              screenshotFormat="image/jpeg"
+              width={350}
+              videoConstraints={videoConstraints}
+            />
+            <button onClick={this.capture}>Capture photo</button>
+
+            <Image imageFullPath={this.state.caputuredImage} />
             <Image imageFullPath={this.state.imageFullPath} />
 
             {/* <Button
