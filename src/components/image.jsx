@@ -4,10 +4,16 @@ class Image extends Component {
   render() {
     return (
       // <img src={ require('./images/image1.jpg') } />
-      <img
-        className={this.props.imageShouldHide ? "hidden" : ""}
-        src={this.props.imageFullPath}
-      />
+      <div
+        style={{
+          display: this.props.imageShouldHide ? "none" : "block"
+        }}
+      >
+        <img
+          // className={this.props.imageShouldHide ? "hidden" : ""}
+          src={this.props.imageFullPath}
+        />
+      </div>
     );
   }
 }

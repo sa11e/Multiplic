@@ -8,7 +8,6 @@ import ResultBoard from "./components/resultBoard";
 import Timer from "./components/timer";
 import StartButton from "./components/startButton";
 import Image from "./components/image";
-import ToogleAnswerMode from "./components/toogleAnswerMode";
 import SelectAnswerButtons from "./components/selectAnswerButtons";
 import SettingsPanel from "./components/settingsPanel";
 import WebCam from "react-webcam";
@@ -16,7 +15,6 @@ import WebCam from "react-webcam";
 
 class App extends Component {
   state = {
-    counters: [{ id: 1, value: 4 }, { id: 2, value: 2 }, { id: 3, value: 0 }],
     correctAnswers: 0,
     answered: 0,
     totalQuestions: window.location.href.includes("localhost") ? 3 : 10,
@@ -38,8 +36,9 @@ class App extends Component {
     settingsShouldHide: true,
 
     // image
-    imageFullPath: "",
-    imageShouldHide: false,
+    // imageFullPath: "",
+    imageShouldHide: true,
+    webcamShouldHide: false,
 
     // Answer mode
     answerMode: "",
@@ -55,56 +54,31 @@ class App extends Component {
 
   modalClose = () => this.setState({ modalShow: false });
 
-  importAll = r => {
-    var k = r.keys();
-    let images = {};
-    r.keys().map((item, index) => {
-      images[item.replace("./", "")] = r(item);
-    });
-    return images;
-  };
+  // importAll = r => {
+  //   var k = r.keys();
+  //   let images = {};
+  //   r.keys().map((item, index) => {
+  //     images[item.replace("./", "")] = r(item);
+  //   });
+  //   return images;
+  // };
 
-  getRandomImage = () => {
-    // Get all images in the images folder
-    var images = require
-      .context("./images", false, /\.(png|jpe?g|svg)$/)
-      .keys();
-    var length = images.length;
+  // getRandomImage = () => {
+  //   // Get all images in the images folder
+  //   var images = require
+  //     .context("./images", false, /\.(png|jpe?g|svg)$/)
+  //     .keys();
+  //   var length = images.length;
 
-    // Get random number between 0 and number of images
-    var randomIndex = Math.floor(Math.random() * length);
-    var randomImage = images[randomIndex].replace("./", "");
-    var imageFullPath = require("./images/" + randomImage);
-    return imageFullPath;
-  };
+  //   // Get random number between 0 and number of images
+  //   var randomIndex = Math.floor(Math.random() * length);
+  //   var randomImage = images[randomIndex].replace("./", "");
+  //   var imageFullPath = require("./images/" + randomImage);
+  //   return imageFullPath;
+  // };
 
   updateSelectedMultiTable = newTable => {
     this.setState({ selectedMultitable: newTable });
-  };
-
-  handleDelete = counterId => {
-    console.log("delete" + counterId);
-    const counters = this.state.counters.filter(c => c.id !== counterId);
-    this.setState({ counters });
-  };
-
-  handleReset = () => {
-    const counters = this.state.counters.map(x => {
-      x.value = 0;
-      return;
-    });
-    this.setState({ counters });
-  };
-
-  handleIncrement = counter => {
-    const counters = [...this.state.counters];
-    var index = counters.indexOf(counter);
-    counters[index] = { ...counter };
-    counters[index].value++;
-    this.setState({ counters });
-    // console.log(this.state.counters[0]);
-    // console.log(counter);
-    // console.log(counters[0]);
   };
 
   createNextQuestion = () => {
@@ -196,12 +170,13 @@ class App extends Component {
 
     // Generate success image
     // var imageFullPath = require("./images/Inez_staende_mob.JPG");
-    var imageFullPath = this.getRandomImage();
+    // var imageFullPath = this.getRandomImage();
+    // var imageFullPath = ;
 
     // Update the state
     this.setState({
       resultText: "Klar! Tid: " + this.getTimerText(this.state.resultTime),
-      imageFullPath: imageFullPath,
+      // imageFullPath: this.caputuredImage,
       imageShouldHide: false
     });
   };
@@ -213,13 +188,13 @@ class App extends Component {
       this.stopGame();
     } else {
       // Start the game and the timer
-      this.capture();
       this.startGame();
     }
   };
 
   startGame = () => {
     this.createNextQuestion();
+    this.capture();
     this.setState({
       correctAnswers: 0,
       startButtonText: "Stop",
@@ -227,8 +202,8 @@ class App extends Component {
       isGameStarted: true,
       startTime: new Date(),
       timerHandler: setInterval(this.tick, 33),
-      imageFullPath: "",
-      imageShouldHide: true
+      imageShouldHide: true,
+      webcamShouldHide: true
     });
   };
 
@@ -396,18 +371,31 @@ class App extends Component {
                 answerField={this.state.answerField}
               />
             )}
-            <WebCam
-              audio={false}
-              height={350}
-              ref={this.setRef}
-              screenshotFormat="image/jpeg"
-              width={350}
-              videoConstraints={videoConstraints}
-            />
-            <button onClick={this.capture}>Capture photo</button>
+            <div
+              style={{
+                display: this.state.webcamShouldHide ? "none" : "block"
+              }}
+            >
+              <WebCam
+                audio={false}
+                height={350}
+                ref={this.setRef}
+                screenshotFormat="image/jpeg"
+                width={350}
+                videoConstraints={videoConstraints}
+              />
+            </div>
+            {/* <button onClick={this.capture}>Capture photo</button> */}
 
-            <Image imageFullPath={this.state.caputuredImage} />
-            <Image imageFullPath={this.state.imageFullPath} />
+            {/* <Image imageFullPath={this.state.caputuredImage} /> */}
+
+            {/* <label>"hej "+ {this.state.imageShouldHide}</label> */}
+            <Image
+              imageFullPath={this.state.caputuredImage}
+              imageShouldHide={this.state.imageShouldHide}
+            />
+
+            {/* <Image imageFullPath={this.state.imageFullPath} /> */}
 
             {/* <Button
               variant="primary"
