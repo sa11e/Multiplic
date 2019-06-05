@@ -49,33 +49,14 @@ class App extends Component {
     modalShow: false,
 
     // Captured image
-    caputuredImage: ""
+    caputuredImage: "",
+
+    // Reward feature
+    timeToGetReward: 25000,
+    rewardText: ""
   };
 
   modalClose = () => this.setState({ modalShow: false });
-
-  // importAll = r => {
-  //   var k = r.keys();
-  //   let images = {};
-  //   r.keys().map((item, index) => {
-  //     images[item.replace("./", "")] = r(item);
-  //   });
-  //   return images;
-  // };
-
-  // getRandomImage = () => {
-  //   // Get all images in the images folder
-  //   var images = require
-  //     .context("./images", false, /\.(png|jpe?g|svg)$/)
-  //     .keys();
-  //   var length = images.length;
-
-  //   // Get random number between 0 and number of images
-  //   var randomIndex = Math.floor(Math.random() * length);
-  //   var randomImage = images[randomIndex].replace("./", "");
-  //   var imageFullPath = require("./images/" + randomImage);
-  //   return imageFullPath;
-  // };
 
   updateSelectedMultiTable = newTable => {
     this.setState({ selectedMultitable: newTable });
@@ -168,17 +149,21 @@ class App extends Component {
     // Stop timer and calculate result time
     this.stopGame();
 
-    // Generate success image
-    // var imageFullPath = require("./images/Inez_staende_mob.JPG");
-    // var imageFullPath = this.getRandomImage();
-    // var imageFullPath = ;
+    var newRewardText = "";
+    if (this.state.resultTime < this.state.timeToGetReward) {
+      newRewardText = this.getRewardText();
+    }
 
     // Update the state
     this.setState({
       resultText: "Klar! Tid: " + this.getTimerText(this.state.resultTime),
-      // imageFullPath: this.caputuredImage,
-      imageShouldHide: false
+      imageShouldHide: false,
+      rewardText: newRewardText
     });
+  };
+
+  getRewardText = () => {
+    return "Hemliga koden: " + (2010 + new Date().getHours());
   };
 
   handleStartButtonClicked = () => {
@@ -203,7 +188,8 @@ class App extends Component {
       startTime: new Date(),
       timerHandler: setInterval(this.tick, 33),
       imageShouldHide: true,
-      webcamShouldHide: true
+      webcamShouldHide: true,
+      rewardText: ""
     });
   };
 
@@ -385,29 +371,12 @@ class App extends Component {
                 videoConstraints={videoConstraints}
               />
             </div>
-            {/* <button onClick={this.capture}>Capture photo</button> */}
-
-            {/* <Image imageFullPath={this.state.caputuredImage} /> */}
-
-            {/* <label>"hej "+ {this.state.imageShouldHide}</label> */}
             <Image
               imageFullPath={this.state.caputuredImage}
               imageShouldHide={this.state.imageShouldHide}
             />
 
-            {/* <Image imageFullPath={this.state.imageFullPath} /> */}
-
-            {/* <Button
-              variant="primary"
-              onClick={() => this.setState({ modalShow: true })}
-            >
-              Launch vertically centered modal
-            </Button> */}
-
-            {/* <SuccessModal
-              show={this.state.modalShow}
-              onHide={this.modalClose}
-            /> */}
+            <h2> {this.state.rewardText}</h2>
           </div>
         </main>
       </React.Fragment>
