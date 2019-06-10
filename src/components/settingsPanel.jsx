@@ -14,18 +14,24 @@ class SettingsPanel extends Component {
         <span className="mr-3">
           <b>Inställningar {this.props.settingsShouldHide ? "▼" : "▲"}</b>
         </span>
+        <hr />
         <div
           style={{ display: this.props.settingsShouldHide ? "none" : "block" }}
         >
+          Visa nummerplatta eller bara tre knapppar:
           <ToogleAnswerMode
             onAnswerModeChanged={this.props.onAnswerModeChanged}
-            choooseAnswerChecked={this.state.answerMode != "numpad"}
+            choooseAnswerChecked={this.props.choooseAnswerChecked}
+            // choooseAnswerChecked={this.state.answerMode != "numpad"}
           />
+          <hr />
+          Välj multiplikationstabell:
           <SelectMultiTable
             updateSelectedMultiTable={newTable =>
               this.props.updateSelectedMultiTable(newTable)
             }
           />
+          <hr />
         </div>
       </div>
     );

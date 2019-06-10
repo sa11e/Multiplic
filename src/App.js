@@ -41,9 +41,9 @@ class App extends Component {
     webcamShouldHide: false,
 
     // Answer mode
-    answerMode: "",
+    answerMode: "numpad",
     choices: [],
-    hideNumPad: true,
+    hideNumPad: false,
     hideSelectButtons: true,
 
     modalShow: false,
@@ -161,7 +161,9 @@ class App extends Component {
   };
 
   getRewardText = () => {
-    return "Hemliga koden: " + (2010 + new Date().getHours());
+    return (
+      "Hemliga koden: " + (2010 + new Date().getDate() + new Date().getHours())
+    );
   };
 
   handleStartButtonClicked = () => {
