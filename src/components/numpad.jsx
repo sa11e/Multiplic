@@ -4,23 +4,9 @@ import NumKey from "./numkey";
 class NumPad extends Component {
   state = {};
 
-  // numkeyOnClickHandler = numkey => {
-  //   var inputValue = "";
-  //   if (numkey < 10) {
-  //     inputValue = this.state.inputValue + numkey;
-  //   }
-
-  //   this.setState({ inputValue });
-  // };
-
   render() {
     return (
       <div>
-        {/* <div>
-          <span>
-            <b>Svar:</b> {this.state.inputValue}
-          </span>
-        </div> */}
         <div>
           <NumKey
             key={1}
@@ -92,14 +78,6 @@ class NumPad extends Component {
             onClick={() => this.props.numkeyClicked(0)}
           />
         </div>
-
-        {/* {this.state.numKeys.map(numkey => (
-          <NumKey
-            key={numkey.id}
-            keyvalue={numkey.keyValue}
-            onClick={this.numkeyOnClickHandler}
-          />
-        ))} */}
       </div>
     );
   }

@@ -68,8 +68,6 @@ class App extends Component {
       questionText: this.state.selectedMultitable + " * " + random + " = ",
       answer: this.state.selectedMultitable * random
     };
-
-    this.setAnswerMode(this.answerMode);
     this.setState({ question, choices: this.getFixedAnswers(question.answer) });
   };
 
@@ -320,10 +318,6 @@ class App extends Component {
               choooseAnswerChecked={this.state.answerMode != "numpad"}
               updateSelectedMultiTable={this.updateSelectedMultiTable}
             />
-            {/* <ToogleAnswerMode
-              onAnswerModeChanged={this.setAnswerMode}
-              choooseAnswerChecked={this.state.answerMode != "numpad"}
-            /> */}
             <StartButton
               buttonText={this.state.startButtonText}
               onClick={this.handleStartButtonClicked}
@@ -350,7 +344,7 @@ class App extends Component {
             )}
             {!this.state.hideNumPad && (
               <NumPad
-                hide={this.state.hideNumPad}
+                // hide={this.state.hideNumPad}
                 okClicked={this.handleOkClicked}
                 clearClicked={this.handleClearClicked}
                 numkeyClicked={this.numkeyOnClickHandler}
