@@ -8,7 +8,8 @@ class Image extends Component {
       "Snygg bild!",
       "Vilket leende!",
       "Kamma dig",
-      "När var du hos frisören senast?"
+      "När var du hos frisören senast?",
+      "Du är snyggare än din katt"
     ];
     // Get random number between 0 and number of images
     var randomIndex = Math.floor(Math.random() * texts.length);
