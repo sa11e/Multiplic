@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ToogleAnswerMode from "./toogleAnswerMode";
 import SelectMultiTable from "./selectMultiTable";
+import SelectAdditionSubstraction from "./selectAdditionSubstraction";
 
 class SettingsPanel extends Component {
   state = {};
@@ -26,7 +27,16 @@ class SettingsPanel extends Component {
           />
           <hr />
           Välj multiplikationstabell:
+          <br></br>
           <SelectMultiTable
+            updateSelectedMultiTable={newTable =>
+              this.props.updateSelectedMultiTable(newTable)
+            }
+          />
+          <br></br>
+          Addition eller Subtraktion:
+          <br></br>
+          <SelectAdditionSubstraction
             updateSelectedMultiTable={newTable =>
               this.props.updateSelectedMultiTable(newTable)
             }

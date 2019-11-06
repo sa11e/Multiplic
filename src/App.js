@@ -63,12 +63,39 @@ class App extends Component {
   };
 
   createNextQuestion = () => {
-    var random = Math.floor(Math.random() * 10 + 1);
+    if (this.state.selectedMultitable === 110) {
+      // Addition 1-10
+      this.createAdditionQuestion(1, 10);
+    } else if (this.state.selectedMultitable === 111) {
+      // Addition 1-10
+      this.createAdditionQuestion(1, 100);
+    } else {
+      // Multiplication
+      this.createMultiplicationQuestion();
+    }
+  };
+
+  createMultiplicationQuestion = () => {
+    var random = this.getRandomNumer(10, 0);
     var question = {
       questionText: this.state.selectedMultitable + " * " + random + " = ",
       answer: this.state.selectedMultitable * random
     };
     this.setState({ question, choices: this.getFixedAnswers(question.answer) });
+  };
+
+  createAdditionQuestion = (min, max) => {
+    var term1 = this.getRandomNumer(max, min);
+    var term2 = this.getRandomNumer(max - term1, 0);
+    var question = {
+      questionText: term1 + " + " + term2 + " = ",
+      answer: term1 + term2
+    };
+    this.setState({ question, choices: [] });
+  };
+
+  getRandomNumer = (max, min) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
   getFixedAnswers = correctAnswer => {
