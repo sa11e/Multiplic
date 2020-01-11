@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import NumKey from "./numkey";
+import { ArithmeticChoice } from "../constants.js";
 
 class SelectAdditionSubstraction extends Component {
   state = {};
@@ -10,7 +11,7 @@ class SelectAdditionSubstraction extends Component {
       <NumKey
         keyvalue={"Addition 1-10"}
         key={110}
-        onClick={() => this.props.updateSelectedMultiTable(110)}
+        onClick={() => this.props.updateSelectedMultiTable(ArithmeticChoice.Addition1To10)}
       />
     );
 
@@ -18,7 +19,7 @@ class SelectAdditionSubstraction extends Component {
       <NumKey
         keyvalue={"Addition 1-100"}
         key={111}
-        onClick={() => this.props.updateSelectedMultiTable(111)}
+        onClick={() => this.props.updateSelectedMultiTable(ArithmeticChoice.Addition1To100)}
       />
     );
 
@@ -26,7 +27,7 @@ class SelectAdditionSubstraction extends Component {
       <NumKey
         keyvalue={"Subtraktion 1-10"}
         key={112}
-        onClick={() => this.props.updateSelectedMultiTable(112)}
+        onClick={() => this.props.updateSelectedMultiTable(ArithmeticChoice.Subtraction1To10)}
       />
     );
 
@@ -34,7 +35,7 @@ class SelectAdditionSubstraction extends Component {
       <NumKey
         keyvalue={"Subtraktion 1-100"}
         key={113}
-        onClick={() => this.props.updateSelectedMultiTable(113)}
+        onClick={() => this.props.updateSelectedMultiTable(ArithmeticChoice.Subtraction1To100)}
       />
     );
 

@@ -11,7 +11,7 @@ import Image from "./components/image";
 import SelectAnswerButtons from "./components/selectAnswerButtons";
 import SettingsPanel from "./components/settingsPanel";
 import WebCam from "react-webcam";
-// import SuccessModal from "./components/successModal";
+import { ArithmeticChoice } from "./constants.js";
 
 class App extends Component {
   state = {
@@ -63,12 +63,18 @@ class App extends Component {
   };
 
   createNextQuestion = () => {
-    if (this.state.selectedMultitable === 110) {
+    if (this.state.selectedMultitable === ArithmeticChoice.Addition1To10) {
       // Addition 1-10
       this.createAdditionQuestion(1, 10);
-    } else if (this.state.selectedMultitable === 111) {
-      // Addition 1-10
+    } else if (this.state.selectedMultitable === ArithmeticChoice.Addition1To100) {
+      // Addition 1-100
       this.createAdditionQuestion(1, 100);
+    } else if (this.state.selectedMultitable === ArithmeticChoice.Subtraction1To10) {
+      // Subtraction 1-10
+      this.createSubtractionQuestion(1, 10);
+    } else if (this.state.selectedMultitable === ArithmeticChoice.Subtraction1To100) {
+      // Subtraction 1-100
+      this.createSubtractionQuestion(1, 100);
     } else {
       // Multiplication
       this.createMultiplicationQuestion();
@@ -91,6 +97,16 @@ class App extends Component {
       questionText: term1 + " + " + term2 + " = ",
       answer: term1 + term2
     };
+    this.setState({ question, choices: this.getFixedAnswers(question.answer) });
+  };
+
+  createSubtractionQuestion = (min, max) => {
+    var term1 = this.getRandomNumer(max, min);
+    var term2 = this.getRandomNumer(term1, 0);
+    var question = {
+      questionText: term1 + " - " + term2 + " = ",
+      answer: term1 - term2
+    };
     this.setState({ question, choices: [] });
   };
 
@@ -103,25 +119,48 @@ class App extends Component {
     var numberOfAnswers = 3;
     for (var i = 0; i < numberOfAnswers; i++) {
       var correctAnswerIsAdded = fixedAnswers.includes(correctAnswer);
-      if (
-        !correctAnswerIsAdded &&
-        (i == numberOfAnswers - 1 || Math.random() < 1 / numberOfAnswers)
-      ) {
+      if (!correctAnswerIsAdded && (i == numberOfAnswers - 1 || Math.random() < 1 / numberOfAnswers)) {
         // Add correct number
         fixedAnswers[i] = correctAnswer;
         continue;
       }
 
       // Add a random numner, possible correct answer
-      fixedAnswers[i] = this.getRandomAnswer(fixedAnswers);
+      if (this.isMultiplicationSelected() == true) {
+        fixedAnswers[i] = this.getRandomMultiplicationAnswer(fixedAnswers);
+      } else {
+        fixedAnswers[i] = this.getRandomAddOrSubAnswer(fixedAnswers);
+      }
     }
     return fixedAnswers;
   };
 
-  getRandomAnswer = excludeList => {
+  isMultiplicationSelected = () => {
+    if (this.state.selectedMultitable < 100) {
+      return true;
+    }
+    return false;
+  };
+
+  getRandomMultiplicationAnswer = excludeList => {
     while (true) {
       var random = Math.floor(Math.random() * 10 + 1);
       var randomAnswer = this.state.selectedMultitable * random;
+      if (!excludeList.includes(randomAnswer)) return randomAnswer;
+    }
+  };
+
+  getRandomAddOrSubAnswer = excludeList => {
+    while (true) {
+      var randomAnswer = this.getRandomNumer(10, 0);
+
+      if (
+        this.state.selectedMultitable === ArithmeticChoice.Addition1To100 ||
+        this.state.selectedMultitable === ArithmeticChoice.Subtraction1To100
+      ) {
+        randomAnswer = this.getRandomNumer(10, 0);
+      }
+
       if (!excludeList.includes(randomAnswer)) return randomAnswer;
     }
   };
@@ -188,9 +227,7 @@ class App extends Component {
   };
 
   getRewardText = () => {
-    return (
-      "Hemliga koden: " + (2010 + new Date().getDate() + new Date().getHours())
-    );
+    return "Hemliga koden: " + (2010 + new Date().getDate() + new Date().getHours());
   };
 
   handleStartButtonClicked = () => {
@@ -228,10 +265,7 @@ class App extends Component {
   stopGame = () => {
     clearInterval(this.state.timerHandler);
     this.setResultTime();
-    if (
-      this.state.resultTime < this.state.bestResultTime ||
-      this.state.bestResultTime === 0
-    ) {
+    if (this.state.resultTime < this.state.bestResultTime || this.state.bestResultTime === 0) {
       // New record!
       this.setState({
         bestResultTime: this.state.resultTime,
@@ -265,9 +299,7 @@ class App extends Component {
       timerText: this.getTimerText(milliseconds)
     });
 
-    console.log(
-      "ResultTime:" + milliseconds + " = " + this.getTimerText(milliseconds)
-    );
+    console.log("ResultTime:" + milliseconds + " = " + this.getTimerText(milliseconds));
   };
 
   getTimerText = milliseconds => {
@@ -283,9 +315,7 @@ class App extends Component {
     var seconds = Math.floor(milliseconds / 1000);
     milliseconds -= seconds * 1000;
 
-    return (
-      mins + " min " + seconds + "," + Math.round(milliseconds / 100) + " sek"
-    );
+    return mins + " min " + seconds + "," + Math.round(milliseconds / 100) + " sek";
   };
 
   numkeyOnClickHandler = numkey => {
@@ -361,15 +391,9 @@ class App extends Component {
               total={this.state.totalQuestions}
               resultText={this.state.resultText}
             />
-            <Question
-              questionText={this.state.question.questionText}
-              answerField={this.state.answerField}
-            />
+            <Question questionText={this.state.question.questionText} answerField={this.state.answerField} />
             {!this.state.hideSelectButtons && (
-              <SelectAnswerButtons
-                choices={this.state.choices}
-                answerbuttonClicked={this.handleAnswerbuttonClicked}
-              />
+              <SelectAnswerButtons choices={this.state.choices} answerbuttonClicked={this.handleAnswerbuttonClicked} />
             )}
             {!this.state.hideNumPad && (
               <NumPad
@@ -394,10 +418,7 @@ class App extends Component {
                 videoConstraints={videoConstraints}
               />
             </div>
-            <Image
-              imageFullPath={this.state.caputuredImage}
-              imageShouldHide={this.state.imageShouldHide}
-            />
+            <Image imageFullPath={this.state.caputuredImage} imageShouldHide={this.state.imageShouldHide} />
 
             <h2> {this.state.rewardText}</h2>
           </div>

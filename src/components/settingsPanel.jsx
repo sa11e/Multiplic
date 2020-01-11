@@ -9,16 +9,12 @@ class SettingsPanel extends Component {
     // const { setAnswerMode } = this.props;
 
     return (
-      <div
-        onClick={event => this.props.onSettingsPanelClicked(event.target.value)}
-      >
+      <div onClick={event => this.props.onSettingsPanelClicked(event.target.value)}>
         <span className="mr-3">
           <b>Inställningar {this.props.settingsShouldHide ? "▼" : "▲"}</b>
         </span>
         <hr />
-        <div
-          style={{ display: this.props.settingsShouldHide ? "none" : "block" }}
-        >
+        <div className="settings" style={{ display: this.props.settingsShouldHide ? "none" : "block" }}>
           Visa nummerplatta eller bara tre knapppar:
           <ToogleAnswerMode
             onAnswerModeChanged={this.props.onAnswerModeChanged}
@@ -28,18 +24,12 @@ class SettingsPanel extends Component {
           <hr />
           Välj multiplikationstabell:
           <br></br>
-          <SelectMultiTable
-            updateSelectedMultiTable={newTable =>
-              this.props.updateSelectedMultiTable(newTable)
-            }
-          />
+          <SelectMultiTable updateSelectedMultiTable={newTable => this.props.updateSelectedMultiTable(newTable)} />
           <br></br>
           Addition eller Subtraktion:
           <br></br>
           <SelectAdditionSubstraction
-            updateSelectedMultiTable={newTable =>
-              this.props.updateSelectedMultiTable(newTable)
-            }
+            updateSelectedMultiTable={newTable => this.props.updateSelectedMultiTable(newTable)}
           />
           <hr />
         </div>
