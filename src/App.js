@@ -34,6 +34,7 @@ class App extends Component {
 
     //settings
     settingsShouldHide: true,
+    currentSettingsText: "Multiplikationstabell 5",
 
     // image
     // imageFullPath: "",
@@ -60,6 +61,26 @@ class App extends Component {
 
   updateSelectedMultiTable = newTable => {
     this.setState({ selectedMultitable: newTable });
+    this.setState({ currentSettingsText: this.getCurrentSettingsText(newTable) });
+  };
+
+  getCurrentSettingsText = newTable => {
+    if (newTable === ArithmeticChoice.Addition1To10) {
+      // Addition 1-10
+      return "Addition 1 till 10";
+    } else if (newTable === ArithmeticChoice.Addition1To100) {
+      // Addition 1-100
+      return "Addition 1 till 100";
+    } else if (newTable === ArithmeticChoice.Subtraction1To10) {
+      // Subtraction 1-10
+      return "Subtraktion 1 till 10";
+    } else if (newTable === ArithmeticChoice.Subtraction1To100) {
+      // Subtraction 1-100
+      return "Subtraktion 1 till 100";
+    } else {
+      // Multiplication
+      return "Multiplikationstabell " + newTable;
+    }
   };
 
   createNextQuestion = () => {
@@ -329,7 +350,6 @@ class App extends Component {
   };
 
   setAnswerMode = mode => {
-    // alert("" + mode);
     var hideNumPad = false;
     var hideSelectButtons = false;
     if (mode == "numpad") {
@@ -373,6 +393,7 @@ class App extends Component {
             <SettingsPanel
               onSettingsPanelClicked={this.settingsPanelClicked}
               settingsShouldHide={this.state.settingsShouldHide}
+              currentSettingsText={this.state.currentSettingsText}
               onAnswerModeChanged={this.setAnswerMode}
               choooseAnswerChecked={this.state.answerMode != "numpad"}
               updateSelectedMultiTable={this.updateSelectedMultiTable}

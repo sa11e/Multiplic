@@ -11,8 +11,9 @@ class SettingsPanel extends Component {
     return (
       <div onClick={event => this.props.onSettingsPanelClicked(event.target.value)}>
         <span className="mr-3">
-          <b>Inställningar {this.props.settingsShouldHide ? "▼" : "▲"}</b>
+          <b>{this.props.currentSettingsText}</b>
         </span>
+        <div style={{ float: "right" }}>Inställningar {this.props.settingsShouldHide ? "▼" : "▲"}</div>
         <hr />
         <div className="settings" style={{ display: this.props.settingsShouldHide ? "none" : "block" }}>
           Visa nummerplatta eller bara tre knapppar:
