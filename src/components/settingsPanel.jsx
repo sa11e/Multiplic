@@ -11,7 +11,7 @@ class SettingsPanel extends Component {
     return (
       <div onClick={event => this.props.onSettingsPanelClicked(event.target.value)}>
         <span className="mr-3">
-          <b>{this.props.currentSettingsText}</b>
+          <b>Träna matte - {this.props.currentSettingsText}</b>
         </span>
         <div style={{ float: "right" }}>Inställningar {this.props.settingsShouldHide ? "▼" : "▲"}</div>
         <hr />
