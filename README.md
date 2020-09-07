@@ -7,3 +7,8 @@ It is a game where the user could learn math:
 - Multiplication table 1-10
 - Addition 1-100
 - Subtraction 1-100
+
+## How to run
+
+- npm install
+- npm start
